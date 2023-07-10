@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./assets/css/style.css" />
+    <title>Weather App</title>
+  </head>
+  <body>
+    <div class="card">
+      <div class="search">
+        <input
+          type="search"
+          name=""
+          placeholder="Enter City name"
+          spellcheck="false"
+          id=""
+        />
+        <button>
+          <img src="./assets/images/search.png" alt="" />
+        </button>
+      </div>
+      <div class="weather">
+        <img src="./assets/images/rain.png" class="weather-icon" alt="" />
+        <h1 class="temp">25°c</h1>
+        <h2 class="city">Fergana</h2>
+        <div class="details">
+          <div class="col">
+            <img src="./assets/images/humidity.png" alt="" />
+            <div>
+              <p class="humidity">50%</p>
+              <p>humidity</p>
+            </div>
+          </div>
+          <div class="col">
+            <img src="./assets/images/wind.png" alt="" />
+            <div>
+              <p class="wind">15km/h</p>
+              <p>wind speed</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const apiKey = "5585a0909f956667a4c2bc32622898e7";
+      const apiUrl =
+        "https://api.openweathermap.org/data/2.5/weather?units=metric&q= ";
+
+      const searchBox = document.querySelector(".search input");
+      const searchBtn = document.querySelector(".search button");
+      const weatherIcon = document.querySelector(".weather-icon");
+
+      async function checkWeather(city) {
+        const response = await fetch(apiUrl + city + `&appid=${apiKey}`);
+        var data = await response.json();
+
+        document.querySelector(".city").innerHTML = data.name;
+        document.querySelector(".temp").innerHTML =
+          Math.round(data.main.temp) + "°c";
+        document.querySelector(".humidity").innerHTML =
+          data.main.humidity + " %";
+        document.querySelector(".wind").innerHTML = data.wind.speed + " km/h";
+
+        if (data.weather[0].main == "Clouds") {
+          weatherIcon.src = "/assets/images/clouds.png";
+        } else if (data.weather[0].main == "Clear") {
+          weatherIcon.src = "/assets/images/clear.png";
+        } else if (data.weather[0].main == "Rain") {
+          weatherIcon.src = "/assets/images/rain.png";
+        } else if (data.weather[0].main == "Drizzle") {
+          weatherIcon.src = "/assets/images/drizzle.png";
+        } else if (data.weather[0].main == "Mist") {
+          weatherIcon.src = "/assets/images/mist.png";
+        }
+      }
+
+      searchBtn.addEventListener("click", () => {
+        checkWeather(searchBox.value);
+      });
+    </script>
+  </body>
+</html>
